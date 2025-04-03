@@ -10,6 +10,8 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   	<link rel="stylesheet" type="text/css" href="static './style.css'">
 	<link href="https://fonts.googleapis.com/css2?family=PT+Sans+Caption&display=swap" rel="stylesheet">
+	<!--<script src="./script.js"></script>-->
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -34,9 +36,103 @@
   </head>
   <body>
 
-    <div>
+    <div id="test">
         <h1>Bus Finder</h1>
     </div>
+	<!--
+	<div>
+		<button onclick="userAction()">Click me</button> 
+	</div>
+-->
+<!--
+	<script>
+	var url = "https://bustimes.org/api/vehicles/?id=&vehicle_type=&livery=583&withdrawn=&search=&fleet_code=&reg=&slug=&operator=&code=&ordering=id&$";
+
+	/* this tells the page to wait until jQuery has loaded, so you can use the Ajax call */
+
+	$(document).ready(function(){
+  		$.ajax({
+   		 url: url,
+    	dataType: 'json',
+      		error: function(){
+        	console.log('JSON FAILED for data');
+      	},
+    	success:function(result){
+  	/* the results is your json, you can reference the elements directly by using it here, without creating any additional variables */
+  
+      var cartItemsList = document.getElementById("cartItemsList");
+
+      result.results.forEach(function(element) {
+      cartItemsList.insertAdjacentHTML( 'beforeend','<li>${element.fleet_code} : ${element.reg}</li>');
+      }); // end of forEach
+    }  // end of success fn
+   }) // end of Ajax call
+ }) // end of $(document).ready() function
+
+ </script>
+ <div id="cart">
+    <h2>Bus</h2>
+    <ul id="cartItemsList">
+    </ul>
+
+<script>
+const userAction = async () => {
+    const response = await fetch('https://bustimes.org/api/vehicles/?id=&vehicle_type=&livery=583&withdrawn=&search=&fleet_code=&reg=&slug=&operator=&code=&ordering=id&$');
+    const busList = await response.json();
+
+    // Call appendData and pass busList to it
+    appendData(busList);
+};
+
+function appendData(busList) {
+    var mainContainer = document.getElementById("test");
+    for (var i = 0; i < busList.length; i++) {
+        var div = document.createElement("div");
+        div.innerHTML = 'Bus: ' + busList[i].fleet_code + ' - ' + busList[i].reg;
+        mainContainer.appendChild(div);
+    }
+}
+</script>
+
+-->
+
+<script>
+		//const axios = require('axios');
+	console.log('hi');
+	function userAction() {
+
+	var input = document.getElementById("fnum");
+		console.log(input.value);
+		axios.get('https://bustimes.org/api/vehicles/?id=&slug=&operator=&vehicle_type=&livery=&withdrawn=&search=&fleet_code=' + input.value + '&reg=&code=&ordering=id')
+		.then(function (response) {
+			// handle success
+			console.log(response);
+			var busList = document.getElementById("busList");
+
+			response.data.results.forEach(function(element) {
+				console.log(element.reg);
+			//busList.insertAdjacentHTML( 'beforeend', '<li>${element.reg}</li>');
+			busList.innerHTML = element.reg;
+			});
+		})
+	}
+</script>
+
+<p>Enter fleet number:</p>
+
+	Fleet number: <input type="text" id="fnum"><br>
+
+<div>
+	<button onclick="userAction()">Click me</button> 
+</div>
+
+<div id="bus">
+	<h2>Bus</h2>
+	<ul id="busList">
+	</ul>
+</div>
+
+</div>
 
   </body>
 </html>
